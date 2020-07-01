@@ -51,7 +51,7 @@ class Student
     sql = <<-SQL
         SELECT *
         FROM students
-        WHERE id = 1
+        WHERE grade = 9 
       SQL
    
       DB[:conn].execute(sql).map do |row|
@@ -61,22 +61,52 @@ class Student
 
   #This method should return an array of all the students below 12th grade.
   def self.students_below_12th_grade
-
+    sql = <<-SQL
+        SELECT *
+        FROM students
+        WHERE grade < 12
+      SQL
+   
+      DB[:conn].execute(sql).map do |row|
+        self.new_from_db(row)
+      end
   end
 
+  #DO NOT UNDERSTND WHAT THIS METHOD WANTS
+  #This is a class method that takes in an argument of the number of students from
+  #grade 10 to select.
   #This method should return an array of exactly X number of students.
   def self.first_X_students_in_grade_10(number_students_grade_10)
 
   end
 
-  #his should return the first student that is in grade 10.
+  #NOT PASSING
+  #this should return the first student that is in grade 10.
   def self.first_student_in_grade_10 
-
+    sql = <<-SQL
+        SELECT *
+        FROM students
+        WHERE grade = 10
+        ORDER BY id
+        LIMIT 1
+      SQL
+   
+      DB[:conn].execute(sql, name).map do |row|
+        self.new_from_db(row)
+      end.first
   end
 
   #This is a class method that takes in an argument of a grade for which to retrieve the roster. This method should return an array of all students for grade X.
-  def self.all_students_in_grade_X 
+  def self.all_students_in_grade_X(grade)
+    sql = <<-SQL
+      SELECT *
+      FROM students
+      WHERE grade = ?
+    SQL
 
+    DB[:conn].execute(sql, grade).map do |row|
+      self.new_from_db(row)
+    end
   end
   
   def self.create_table
